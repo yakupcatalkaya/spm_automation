@@ -5,9 +5,9 @@
 %-----------------------------------------------------------------------
 matlabbatch{1}.cfg_basicio.file_dir.file_ops.cfg_named_file.name = 'run1run2files';
 matlabbatch{1}.cfg_basicio.file_dir.file_ops.cfg_named_file.files = {
-                                                                     {'C:\Users\yakupcatalkaya\Desktop\mri\sub35\SUB35_VARONLY_301021_35301021\AUSAF_IPEK_20211030_140814_703000\MOCOSERIES_0005\s35e1.nii'}
-                                                                     {'C:\Users\yakupcatalkaya\Desktop\mri\sub35\SUB35_VARONLY_301021_35301021\AUSAF_IPEK_20211030_140814_703000\MOCOSERIES_0007\s35e2.nii'}
-                                                                     {'C:\Users\yakupcatalkaya\Desktop\mri\sub35\SUB35_VARONLY_301021_35301021\AUSAF_IPEK_20211030_140814_703000\MOCOSERIES_0009\s35e3.nii'}
+                                                                     {'C:\Users\yakupcatalkaya\Desktop\mri\sub35\SUB35_VARONLY_301021_35301021\20211030_140814_703000\MOCOSERIES_0005\s35e1.nii'}
+                                                                     {'C:\Users\yakupcatalkaya\Desktop\mri\sub35\SUB35_VARONLY_301021_35301021\20211030_140814_703000\MOCOSERIES_0007\s35e2.nii'}
+                                                                     {'C:\Users\yakupcatalkaya\Desktop\mri\sub35\SUB35_VARONLY_301021_35301021\20211030_140814_703000\MOCOSERIES_0009\s35e3.nii'}
                                                                      }';
 matlabbatch{2}.spm.spatial.realign.estwrite.data{1}(1) = cfg_dep('Named File Selector: run1run2files(1) - Files', substruct('.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','files', '{}',{1}));
 matlabbatch{2}.spm.spatial.realign.estwrite.data{2}(1) = cfg_dep('Named File Selector: run1run2files(2) - Files', substruct('.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','files', '{}',{2}));
