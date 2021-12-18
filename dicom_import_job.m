@@ -5,7 +5,7 @@
 %-----------------------------------------------------------------------
 %%
 matlabbatch{1}.spm.util.import.dicom.data = {
-                                             '/home/mrjacob/Desktop/mri/sub35/SUB35_VARONLY_301021_35301021/AUSAF_IPEK_20211030_140814_703000/T1_MPR_NS_SAG_P2_1MM_ISO_MK_32CH_MODIFIED_0003/SUB35_VARONLY_301021.MR.AUSAF_IPEK.0003.0001.2021.10.30.15.37.21.109375.95957292.IMA'
+                                             '/home/mrjacob/Desktop/mri/sub35/SUB35_VARONLY_301021_35301021/20211030_140814_703000/T1_MPR_NS_SAG_P2_1MM_ISO_MK_32CH_MODIFIED_0003/SUB35_VARONLY_301021.MR.0003.0001.2021.10.30.15.37.21.109375.95957292.IMA'
                                              };
 %%
 matlabbatch{1}.spm.util.import.dicom.root = 'flat';
