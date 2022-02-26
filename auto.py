@@ -14,7 +14,7 @@ def get_direc():
     for item in subjectpath.split(" "):
         if item != "":
             subfolders.append(item[1:-1])
-
+    subfolders.sort()
     # Matlab PATH
     try:
         matlabpath = subprocess.Popen("which matlab", shell=True,
@@ -143,7 +143,11 @@ def dicom_to_nii_spm(jobpath, in_path, out_path, dicompath):
                 dicom_job.run()
                 list_files = sorted(os.listdir(out_path + out))
                 for item in list_files:
-                    if "e1" in item or "e2" in item or "e3" in item or "e4" in item:
+                    skip = False
+                    for iteration in range(50):
+                        if "e" + str(iteration) in item:
+                            skip = True
+                    if skip:
                         continue
                     else:
                         os.remove(out_path + out + "/" + item)
@@ -177,15 +181,14 @@ def database_creator(jobpath, subjects, dicompath, dicom=False):
 def batch_editor(batchpath, subjects, output, spmpath):
     for subject in subjects:
         list_path = os.listdir(output + "/" + subject.strip("/").split("/")[-1] + "/func")
-        func_number = len(list_path)
-        if func_number == 1:
-            batchpath_new = batchpath.split(".")[0] + "_one.m"
-            batch_file = open(batchpath_new, 'r')
-        elif func_number == 2:
-            batchpath_new = batchpath.split(".")[0] + "_two.m"
-            batch_file = open(batchpath_new, 'r')
-        else:
-            batch_file = open(batchpath, 'r')
+        temp_list_path = list_path.copy()
+        func_number = 0
+        for item in temp_list_path:
+            if ".nii" in item:
+                func_number += 1
+            else:
+                os.remove(output + "/" + subject.strip("/").split("/")[-1] + "/func/" + item)
+        batch_file = open(batchpath, 'r')
         base_code = batch_file.read().split(";")
         altered_code = base_code
         tissue_count = 1
@@ -196,13 +199,32 @@ def batch_editor(batchpath, subjects, output, spmpath):
                 nii_file_count = 0
                 for item_index, line_item in enumerate(line.split("{")):
                     if "nii" in line_item:
-                        func_nii_path = output + "/" + subject.strip("/").split("/")[-1] + "/func/"
-                        func_nii_path += os.listdir(func_nii_path)[nii_file_count]
-                        temp_list = altered_items[item_index].split("'")
-                        temp_list[1] = func_nii_path
-                        temp_string = "'".join(map(str, temp_list))
-                        altered_items[item_index] = temp_string
-                        nii_file_count += 1
+                        for func_num in range(func_number):
+                            func_nii_path = output + "/" + subject.strip("/").split("/")[-1] + "/func/"
+                            func_nii_path += sorted(os.listdir(func_nii_path))[nii_file_count]
+                            temp_list = altered_items[item_index].split("'")
+                            temp_list[1] = func_nii_path
+                            temp_string = "'".join(map(str, temp_list))[:-2]
+                            additional = ""
+                            if func_num == func_number-1:
+                                additional = "}'"
+                            altered_items.append(temp_string + additional)
+                            nii_file_count += 1
+                altered_items.pop(3)
+            elif "spm.spatial.realign.estwrite.data" in line:
+                new_line = ""
+                for func_num in range(func_number):
+                    new_line += "{".join(line.split("{")[:2]) + "{" + str(func_num + 1)
+                    new_line += line.split("{")[2][1:][:51] + str(func_num + 1) + line.split("{")[2][1:][52:] + "{" + "{".join(line.split("{")[3:12])
+                    new_line += "{" + str(func_num + 1) + line.split("{")[12][1:] + ";"
+                altered_items = [new_line[:-1]]
+            elif "spm.temporal.st.scans" in line:
+                new_line = ""
+                for func_num in range(func_number):
+                    new_line += "{".join(line.split("{")[:2]) + "{" + str(func_num + 1)
+                    new_line += line.split("{")[2][1:68] + str(func_num + 1) + line.split("{")[2][69:] + "{" + "{".join(line.split("{")[3:11])
+                    new_line += "{" + str(func_num + 1) + line.split("{")[11][1:] + ";"
+                altered_items = [new_line[:-1]]
             elif "spatial.coreg.estwrite.source" in line:
                 nii_file_count = 0
                 for item_index, line_item in enumerate(line.split("{")):
@@ -217,12 +239,20 @@ def batch_editor(batchpath, subjects, output, spmpath):
             elif "spm.spatial.preproc.tissue" in line and ".tpm" in line:
                 for item_index, line_item in enumerate(line.split("{")):
                     if "nii" in line_item:
-                        tissue = spmpath + "tpm/TPM.nii," + str(tissue_count)
+                        tissue = spmpath + "/tpm/TPM.nii," + str(tissue_count)
                         temp_list = altered_items[item_index].split("'")
                         temp_list[1] = tissue
                         temp_string = "'".join(map(str, temp_list))
                         altered_items[item_index] = temp_string
                         tissue_count += 1
+            elif "spm.spatial.normalise.write.subj.resample" in line:
+                new_line = ""
+                for func_num in range(func_number):
+                    new_line += line.split("{")[0] + "{" + line.split("{")[1].split(")")[0][:-1] + str(func_num+1) + ")"
+                    new_line += line.split("{")[1].split(")")[1][:-1] + str(func_num + 1) + ")" + line.split("{")[1].split(")")[2] + "{"
+                    new_line += "{".join(line.split("{")[2:8]) + "{" + str(func_num + 1)
+                    new_line += line.split("{")[8][1:] + ";"
+                altered_items = [new_line[:-1]]
             new_altered_line = '{'.join(map(str, altered_items))
             altered_code[line_index] = new_altered_line
         new_altered_code = ';'.join(map(str, altered_code))
@@ -306,8 +336,6 @@ def preprocess(jobpath, outfolder, subfolders, preproces=False):
         prep_job.inputs.script = "run " + run_file_path
         if preproces:
             prep_job.run()
-        # os.remove(run_file_path)
-        # os.remove(outfolder + "/" + subject.strip("/").split("/")[-1] + "_batch.m")
 
 
 def main():
