@@ -5,13 +5,9 @@
 %-----------------------------------------------------------------------
 matlabbatch{1}.cfg_basicio.file_dir.file_ops.cfg_named_file.name = 'run1run2files';
 matlabbatch{1}.cfg_basicio.file_dir.file_ops.cfg_named_file.files = {
-                                                                     {'C:\Users\yakupcatalkaya\Desktop\mri\sub35\SUB35_VARONLY_301021_35301021\20211030_140814_703000\MOCOSERIES_0005\s35e1.nii'}
-                                                                     {'C:\Users\yakupcatalkaya\Desktop\mri\sub35\SUB35_VARONLY_301021_35301021\20211030_140814_703000\MOCOSERIES_0007\s35e2.nii'}
-                                                                     {'C:\Users\yakupcatalkaya\Desktop\mri\sub35\SUB35_VARONLY_301021_35301021\20211030_140814_703000\MOCOSERIES_0009\s35e3.nii'}
+                                                                     {'C:\Users\yakupcatalkaya\Desktop\mri\sub35\SUB35_VARONLY_301021_35301021\AUSAF_IPEK_20211030_140814_703000\MOCOSERIES_0005\s35e1.nii'}
                                                                      }';
 matlabbatch{2}.spm.spatial.realign.estwrite.data{1}(1) = cfg_dep('Named File Selector: run1run2files(1) - Files', substruct('.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','files', '{}',{1}));
-matlabbatch{2}.spm.spatial.realign.estwrite.data{2}(1) = cfg_dep('Named File Selector: run1run2files(2) - Files', substruct('.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','files', '{}',{2}));
-matlabbatch{2}.spm.spatial.realign.estwrite.data{3}(1) = cfg_dep('Named File Selector: run1run2files(3) - Files', substruct('.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','files', '{}',{3}));
 matlabbatch{2}.spm.spatial.realign.estwrite.eoptions.quality = 0.9;
 matlabbatch{2}.spm.spatial.realign.estwrite.eoptions.sep = 4;
 matlabbatch{2}.spm.spatial.realign.estwrite.eoptions.fwhm = 5;
@@ -25,8 +21,6 @@ matlabbatch{2}.spm.spatial.realign.estwrite.roptions.wrap = [0 0 0];
 matlabbatch{2}.spm.spatial.realign.estwrite.roptions.mask = 1;
 matlabbatch{2}.spm.spatial.realign.estwrite.roptions.prefix = 'r';
 matlabbatch{3}.spm.temporal.st.scans{1}(1) = cfg_dep('Realign: Estimate & Reslice: Resliced Images (Sess 1)', substruct('.','val', '{}',{2}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','sess', '()',{1}, '.','rfiles'));
-matlabbatch{3}.spm.temporal.st.scans{2}(1) = cfg_dep('Realign: Estimate & Reslice: Resliced Images (Sess 2)', substruct('.','val', '{}',{2}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','sess', '()',{2}, '.','rfiles'));
-matlabbatch{3}.spm.temporal.st.scans{3}(1) = cfg_dep('Realign: Estimate & Reslice: Resliced Images (Sess 3)', substruct('.','val', '{}',{2}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','sess', '()',{3}, '.','rfiles'));
 matlabbatch{3}.spm.temporal.st.nslices = 32;
 matlabbatch{3}.spm.temporal.st.tr = 2;
 matlabbatch{3}.spm.temporal.st.ta = 1.9375;
@@ -84,8 +78,6 @@ matlabbatch{5}.spm.spatial.preproc.warp.bb = [NaN NaN NaN
                                               NaN NaN NaN];
 matlabbatch{6}.spm.spatial.normalise.write.subj.def(1) = cfg_dep('Segment: Forward Deformations', substruct('.','val', '{}',{5}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','fordef', '()',{':'}));
 matlabbatch{6}.spm.spatial.normalise.write.subj.resample(1) = cfg_dep('Slice Timing: Slice Timing Corr. Images (Sess 1)', substruct('.','val', '{}',{3}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('()',{1}, '.','files'));
-matlabbatch{6}.spm.spatial.normalise.write.subj.resample(2) = cfg_dep('Slice Timing: Slice Timing Corr. Images (Sess 2)', substruct('.','val', '{}',{3}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('()',{2}, '.','files'));
-matlabbatch{6}.spm.spatial.normalise.write.subj.resample(3) = cfg_dep('Slice Timing: Slice Timing Corr. Images (Sess 3)', substruct('.','val', '{}',{3}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('()',{3}, '.','files'));
 matlabbatch{6}.spm.spatial.normalise.write.woptions.bb = [-78 -112 -70
                                                           78 76 85];
 matlabbatch{6}.spm.spatial.normalise.write.woptions.vox = [2 2 2];
